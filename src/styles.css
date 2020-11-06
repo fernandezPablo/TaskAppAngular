@@ -1,1 +1,23 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 /* You can add global styles to this file, and also import other style files */
+.bg-secondary{
+    color: #FFFFFF;
+}
+
+.status-pending{
+    background-color: #fa8a8a;
+}
+
+.status-done{
+    background-color: #81f172;
+}
+
+.btn-edit{
+    background-color: #f87f2e !important;
+    color: #FFFFFF !important;
+}
+
+.highlight{
+    background-color: #2a38d3 !important;
+    color: white !important;
+}
