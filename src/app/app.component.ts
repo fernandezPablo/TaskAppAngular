@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild, Renderer2, AfterViewInit} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({ 
   selector: 'app-root',
@@ -7,85 +8,70 @@ import { Component, ElementRef, ViewChild, Renderer2, AfterViewInit} from '@angu
 })
 export class AppComponent implements AfterViewInit {
   title = 'TaskManagerApp';
-  description: string = '';
-  date: string = '';
-  status: boolean = false;
   tasks: Task[] = [];
-  editMode: boolean = false;
+  mode: string = 'ADD';
   editIndex: number = -1;
   errorDescription = false;
   errorDate = false;
+
+  taskForm: FormGroup;
   
   @ViewChild("controlDescription") descriptionInput: ElementRef;
 
-  constructor(private renderer: Renderer2){
-
+  constructor(private renderer: Renderer2, private formBuilder: FormBuilder){
+    this.taskForm = this.formBuilder.group({
+      description: new FormControl('',[Validators.required, Validators.maxLength(255)]),
+      date: new FormControl('',[Validators.required]),
+      status: new FormControl(false)
+    });
   }
 
   ngAfterViewInit(){
     this.renderer.selectRootElement(this.descriptionInput.nativeElement).focus()
   }
 
-  addTask(description: string, date: string, status: boolean){
-    let task = new Task(description,date,status)
-    switch(this.validate(task)){
-      case 'ALL':
-        console.log("Falta descripcion y fecha");
-        this.errorDescription = true;
-        this.errorDate = true;
-        break;
-      case 'DESCRIPTION':
-        console.log("Falta descripcion");
-        this.errorDescription = true;
-        break;
-      case 'DATE':
-        console.log("Falta fecha");
-        this.errorDate = true;
-        break;
-      case 'VALID':
-        this.tasks.push(task)
-        this.description = ''
-        this.date = ''
-        this.status = false
-        this.errorDescription = false
-        this.errorDate = false
-        this.renderer.selectRootElement(this.descriptionInput.nativeElement).focus()
-        break;
+  submitForm(description: string, date: string, status: boolean, mode: string){
+    if(mode ==='ADD') {
+      this.addTask(description,date,status);
+    }
+    else if(mode === 'EDIT') {
+      this.editTask(description,date,status);
+    }
+    else {
+      console.log("wrong option please try again...");
     }
   }
 
-  /*
-  validate(task: Task){
-    return (task.description == '' || task.date == '')? false: true
-  }*/
+  addTask(description: string, date: string, status: boolean){
+      console.log('add task...');
+      let task = new Task(description,date,status);
+      this.tasks.push(task);
+      this.resetForm();
+  }
 
-  validate(task: Task){
-    let isDescription = task.description == ''
-    let isDate = task.date == ''
-    if(isDescription && isDate) return "ALL"
-    if(isDescription) return "DESCRIPTION"
-    if(isDate) return "DATE"
-    return "VALID"
+  editTask(description: string, date: string, status: boolean){
+    console.log('edit task...');
+    let task = new Task(description,date,status);
+    this.tasks[this.editIndex] = task;
+    this.resetForm();
+  }
+
+  resetForm(){
+    this.taskForm.reset({'description': '', 'date': '', 'status': false});
+    this.renderer.selectRootElement(this.descriptionInput.nativeElement).focus();
+  }
+
+  setAllValue(description: string, date: string, status: boolean){
+    this.taskForm.setValue({'description': description, 'date': date, 'status': status});
   }
  
   taskChangeHandler(index: number){
     console.log("emmit event")
     this.editIndex = index
-    this.description = this.tasks[index].description 
-    this.date = this.tasks[index].date
-    this.status = this.tasks[index].status
-    this.editMode = true
+    this.setAllValue(this.tasks[index].description,this.tasks[index].date,this.tasks[index].status);
+    this.mode = 'EDIT'
     this.renderer.selectRootElement(this.descriptionInput.nativeElement).focus()
     window.location.href = "#top"
-  }
-
-  editTask(description: string, date: string, status: boolean){
-    let task = new Task(description,date,status)
-    this.tasks[this.editIndex] = task
-    this.editMode = false
-    this.description = ""
-    this.date = ""
-    this.status = false
   }
 
   highlight(event: any){

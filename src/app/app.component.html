@@ -2,39 +2,34 @@
   <div class="row">
     <a href="#top"></a>
     <div class="col-10 card bg-secondary">
-      <h4 class="text-center mt-1" *ngIf="!editMode;else templateElseTitle">Nueva Tarea</h4>
+      <h4 class="text-center mt-1" *ngIf="mode === 'ADD';else templateElseTitle">New Task</h4>
+  
       <ng-template #templateElseTitle>
-        <h4 class="text-center mt-1">Editar Tarea</h4>
+        <h4 class="text-center mt-1">Edit Task</h4>
       </ng-template>
-      <div class="form-group">
-        <label for="description">Descripcion</label>
-        <input type="text" id="desciption" class="form-control" placeholder="Descripcion" [(ngModel)]="description" *ngIf="!errorDescription;else templateErrorDescription" (focus)="highlight($event)" (focusout)="blur($event)" #controlDescription>
-        <ng-template #templateErrorDescription>
-          <input type="text" id="desciption" class="form-control" placeholder="Descripcion" [(ngModel)]="description" appErrorHighlight>
-        </ng-template>
-      </div>
-      <div class="form-group">
-        <label for="date">Fecha</label>
-        <input type="date" id="date" class="form-control" placeholder="Fecha" [(ngModel)]="date" #controlDate *ngIf="!errorDate;else templateErrorDate" (focus)="highlight($event)" (focusout)="blur($event)">
-        <ng-template #templateErrorDate>
-          <input type="date" id="date" class="form-control" placeholder="Fecha" [(ngModel)]="date" #controlDate appErrorHighlight>
-        </ng-template>
-      </div>
-      <div class="form-check">
-        <input type="checkbox" id="status" class="form-check-input" [(ngModel)]="status" #controlStatus>
-        <label for="status">Estado</label>
-      </div>
-      <div class="form-group">
-        <button type="button" class="btn btn-info form-control" *ngIf="!editMode;else templateEditMode" (click)="addTask(description,date,status)">Crear Tarea</button>
-        <ng-template #templateEditMode>
-          <button type="button" class="btn btn-edit form-control" (click)="editTask(description,date,status)">Editar Tarea</button>
-        </ng-template>
-      </div>
-    </div>
-    <div class="col-10 alert alert-danger text-center mt-1" role="alert" *ngIf="errorDescription || errorDescription">
-      <span>
-        Faltan completar algunos campos
-      </span>
+      
+     <form [formGroup]="taskForm" (ngSubmit)="submitForm(this.taskForm.get('description').value, this.taskForm.get('date').value,this.taskForm.get('status').value,mode)">
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" formControlName="description" class="form-control" placeholder="describe the task to do..." #controlDescription>
+          <span *ngIf="this.taskForm.get('description').invalid && this.taskForm.get('description').touched" style="color: red; background-color: white;">The description is required to continue</span>
+        </div>
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" formControlName="date" class="form-control">
+          <span *ngIf="this.taskForm.get('date').invalid && this.taskForm.get('date').touched" style="color: red; background-color: white;">The date is required to continue</span>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" formControlName="status" name="status" id="status" class="form-check-input">
+          <label for="status">Status</label>
+        </div>
+        <div class="form-group">
+          <button *ngIf="(this.taskForm.get('description').invalid || this.taskForm.get('date').invalid); else templateActivateddButton" type="submit" class="btn btn-info form-control" disabled>Add</button>
+          <ng-template #templateActivateddButton>
+            <button type="submit" class="btn btn-info form-control">Add</button>
+          </ng-template>
+        </div>
+     </form>
     </div>
   </div>
 </div>
