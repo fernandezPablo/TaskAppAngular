@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Task } from '../app.component';
+import { Task } from '../models/Task';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-task-list',
@@ -9,14 +10,17 @@ import { Task } from '../app.component';
 export class TaskListComponent implements OnInit {
   @Input("data") tasks: any[]
   @Output() taskChanged: EventEmitter<number> = new EventEmitter()
-  constructor() { }
+  
+  constructor(private taskService: TasksService) { }
 
   ngOnInit(): void {
   }
 
-  deleteTask(index: number){
-    if(confirm(`Esta seguro de eliminar la tarea ${this.tasks[index].description}`)){
-      this.tasks.splice(index,1)
+  deleteTask(task: Task){
+    if(confirm(`Esta seguro de eliminar la tarea ${task.description}`)){
+      this.taskService.deleteTask(task.id).subscribe( () => {
+        this.tasks = this.tasks.filter( (element) => element.id != task.id )
+      });
     }
   }
 

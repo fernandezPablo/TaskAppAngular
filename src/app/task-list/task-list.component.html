@@ -13,7 +13,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let task of tasks" [ngClass]="{'status-done': task.status, 'status-pending': !task.status}">
-                        <td>{{task.date}}</td>
+                        <td>{{task.date | date:'dd/MM/yyyy' }}</td>
                         <td>{{task.description}}</td>
                         <td *ngIf="task.status; else templateElse">Completada</td>
                         <ng-template #templateElse>
@@ -26,7 +26,7 @@
                                 </span>
                             </button>
                             <button class="btn btn-danger btn-sm">
-                                <span class="material-icons" (click)="deleteTask(tasks.indexOf(task))">
+                                <span class="material-icons" (click)="deleteTask(task)">
                                     delete
                                 </span>
                             </button>
