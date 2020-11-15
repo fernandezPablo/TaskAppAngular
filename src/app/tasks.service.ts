@@ -20,19 +20,14 @@ export class TasksService {
   }
 
   addTask(task: Task): Observable<Task>{
-    console.log("OnAddTaskService");
     return this.http.post<Task>(this.url,task);
   }
 
   deleteTask(id: number): Observable<{}>{
-    console.log("OnDeleteTaskService");
     return this.http.delete(`${this.url}/${id}`);
   }
 
   editTask(task: Task): Observable<Task>{
-    console.log(`id: ${task.id} on taskService`);
-    console.log("OnEditTaskService");
-    console.log(`${this.url}/${task.id}`);
     return this.http.put<Task>(`${this.url}/${task.id}`,task);
   }
 

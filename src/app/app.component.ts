@@ -52,16 +52,13 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   addTask(description: string, date: string, status: boolean){
-      console.log('add task...');
       let task = new Task(description,date,status);
       this.tasksservice.addTask(task).subscribe( task => this.tasks.push(task));
       this.resetForm();
   }
 
   editTask(id: number, description: string, date: string, status: boolean){
-    console.log('edit task...');
     let task = new Task(description,date,status,id);
-    console.log(`id: ${task.id} on editTask AppComponent`);
     this.tasksservice.editTask(task).subscribe( task => {
       this.tasks[this.editIndex] = task;
       this.resetForm();
@@ -76,14 +73,11 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   setAllValue(id: number,description: string, date: string, status: boolean){
     let formatedDate = new Date(date).toISOString().slice(0, -1).slice(0,10);
-    console.log(formatedDate);
     this.taskForm.setValue({'id': id, 'description': description, 'date': formatedDate, 'status': status});
   }
  
   taskChangeHandler(index: number){
     this.editIndex = index
-    console.log(`editIndex: ${this.editIndex}`);
-    console.log(`id: ${this.tasks[index].id} on taskChangeHandler`);
     this.setAllValue(this.tasks[index].id,this.tasks[index].description,this.tasks[index].date,this.tasks[index].status);
     this.mode = 'EDIT'
     this.renderer.selectRootElement(this.descriptionInput.nativeElement).focus()
@@ -91,7 +85,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   highlight(event: any){
-    console.log("highlight")
     this.renderer.addClass(event.target,"highlight")
   }
 
