@@ -12,10 +12,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let task of tasks" [ngClass]="{'status-done': task.status, 'status-pending': !task.status}">
-                        <td>{{task.date | date:'dd/MM/yyyy' }}</td>
-                        <td>{{task.description}}</td>
-                        <td *ngIf="task.status; else templateElse">Completada</td>
+                    <tr *ngFor="let task of tasks" [ngClass]="{'status-done': task.Status, 'status-pending': !task.Status}">
+                        <td>{{task.Date | date:'dd/MM/yyyy' }}</td>
+                        <td>{{task.Description}}</td>
+                        <td *ngIf="task.Status; else templateElse">Completada</td>
                         <ng-template #templateElse>
                             <td> Pendiente </td>
                         </ng-template>

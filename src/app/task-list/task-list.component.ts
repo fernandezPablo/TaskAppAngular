@@ -17,9 +17,9 @@ export class TaskListComponent implements OnInit {
   }
 
   deleteTask(task: Task){
-    if(confirm(`Esta seguro de eliminar la tarea ${task.description}`)){
-      this.taskService.deleteTask(task.id).subscribe( () => {
-        this.tasks = this.tasks.filter( (element) => element.id != task.id )
+    if(confirm(`Esta seguro de eliminar la tarea ${task.Description}`)){
+      this.taskService.deleteTask(task._id).subscribe( () => {
+        this.tasks = this.tasks.filter( (element) => element._id != task._id )
       });
     }
   }

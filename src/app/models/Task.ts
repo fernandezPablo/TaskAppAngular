@@ -1,14 +1,14 @@
 export class Task{
-    id: number;
-    description: string;
-    date: string;
-    status: boolean;
+    _id: string;
+    Description: string;
+    Date: Date;
+    Status: boolean;
   
-    constructor(description: string, date: string, status: boolean, id: number = 0){
-      this.id = id
-      this.description = description
-      this.date = date
-      this.status = status
+    constructor(description: string, date: Date, status: boolean, id: string = ''){
+      this._id = id
+      this.Description = description
+      this.Date = date
+      this.Status = status
     }
 
   

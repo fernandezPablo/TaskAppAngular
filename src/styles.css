@@ -3,6 +3,7 @@
 
 body{
     overflow-x: hidden;
+    background-color: #222!important;
 }
 
 .bg-secondary{
